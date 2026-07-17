@@ -1,0 +1,30 @@
+modules:
+  tcp_connect:
+    prober: tcp
+    timeout: 4s
+    tcp:
+      preferred_ip_protocol: ip4
+
+  tcp_tls:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: ip4
+      tls: true
+      tls_config:
+        ca_file: /etc/blackbox_exporter/ca.cert.pem
+        insecure_skip_verify: false
+
+  http_2xx_tls:
+    prober: http
+    timeout: 5s
+    http:
+      preferred_ip_protocol: ip4
+      valid_http_versions:
+        - HTTP/1.1
+        - HTTP/2.0
+      valid_status_codes:
+        - 200
+      tls_config:
+        ca_file: /etc/blackbox_exporter/ca.cert.pem
+        insecure_skip_verify: false

@@ -1,0 +1,28 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        krb5-kdc \
+        krb5-kpropd \
+        krb5-admin-server \
+        krb5-user \
+        procps \
+        netcat-openbsd \
+        ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p \
+    /etc/krb5kdc \
+    /var/lib/krb5kdc \
+    /run/krb5kdc \
+    /bootstrap
+
+COPY scripts/kdc2-entrypoint.sh /usr/local/sbin/kdc2-entrypoint.sh
+
+RUN chmod +x /usr/local/sbin/kdc2-entrypoint.sh
+
+EXPOSE 88/tcp 88/udp 754/tcp
+
+ENTRYPOINT ["/usr/local/sbin/kdc2-entrypoint.sh"]
